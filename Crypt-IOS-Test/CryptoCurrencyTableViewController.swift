@@ -8,22 +8,55 @@
 import UIKit
 
 class CryptoCurrencyTableViewController: UITableViewController {
-
+    var currencyList = [CurrencyList]()
+    //var iconList = [IconList]()
+    var newArray = Array<Any>()
     override func viewDidLoad() {
         super.viewDidLoad()
+//cannot decode
+//        fetchIcons{ IconResult in
+//        switch IconResult {
+//            case .success( let array):
+//                self.iconList = array
+//                self.tableView.reloadData()
+//            case .failure( let error):
+//                print(error)
+//             }
+//
+//        }
+        //currency
+        fetchCurrencyList{ getCurrencyResult in
+        switch getCurrencyResult {
+            case .success( let currencyList):
+            self.currencyList = currencyList;
+            print(self.currencyList)
+            self.tableView.reloadData()
+            case .failure( let error):
+                print(error)
+             }
+            
+        }
+        //can load NSDictionary in the view
+        IconAPIHelper.fetch{ jsonObject in
+            self.newArray = jsonObject
+            print(self.newArray[1])
+            self.tableView.reloadData()
+            struct Icon: Codable {
+                var asset_id: String
+                var url: String
+            }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        }
     }
+
+    
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -31,15 +64,16 @@ class CryptoCurrencyTableViewController: UITableViewController {
         return 0
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "currency", for: indexPath)
 
         // Configure the cell...
 
+      
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
